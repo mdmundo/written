@@ -34,15 +34,29 @@ pub fn call_gen_higher(pow: usize, values: &[char]) -> Option<String> {
         ['0', '0', '0'] => None,
         ['1', '0', '0'] => get_hundred_thousands(pow),
         ['0', '0', '1'] => get_one_thousands(pow),
-        [_, '1', _] => None,
+        [_, '1', number] => get_teen_thousands(pow, *number),
         [_, _, _] => None,
-        ['1', _] => None,
+        ['1', number] => get_teen_thousands(pow, *number),
         [_, _] => None,
         ['1'] => get_one_thousands(pow),
         [_] => None,
         [] => None,
         [..] => None,
     }
+}
+
+pub fn get_teen_thousands(pow: usize, number: char) -> Option<String> {
+    let thousand = get_thousands(pow, true);
+    let teen = get_teens(number);
+    let mut result = String::new();
+    if teen.is_some() {
+        result.push_str(teen.unwrap());
+        if thousand.is_some() {
+            result.push(' ');
+            result.push_str(thousand.unwrap());
+        }
+    }
+    Some(result)
 }
 
 pub fn get_one_thousands(pow: usize) -> Option<String> {
@@ -113,6 +127,41 @@ pub fn get_units(number: char) -> Option<&'static str> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn doze_mil_e_cem() {
+        let input = validator("12100");
+        let result = parser_and_caller(input.unwrap().as_str());
+        assert_eq!(result.unwrap().as_str(), "Doze Mil e Cem");
+    }
+
+    #[test]
+    fn doze_mil_e_um() {
+        let input = validator("12001");
+        let result = parser_and_caller(input.unwrap().as_str());
+        assert_eq!(result.unwrap().as_str(), "Doze Mil e Um");
+    }
+
+    #[test]
+    fn cem_mil_e_doze() {
+        let input = validator("100012");
+        let result = parser_and_caller(input.unwrap().as_str());
+        assert_eq!(result.unwrap().as_str(), "Cem Mil e Doze");
+    }
+
+    #[test]
+    fn um_milhao_e_cem_mil_e_doze() {
+        let input = validator("10001100");
+        let result = parser_and_caller(input.unwrap().as_str());
+        assert_eq!(result.unwrap().as_str(), "Dez Milhões e Um Mil e Cem");
+    }
+
+    #[test]
+    fn dez_milhoes_e_um_mil_e_cem() {
+        let input = validator("10001100");
+        let result = parser_and_caller(input.unwrap().as_str());
+        assert_eq!(result.unwrap().as_str(), "Dez Milhões e Um Mil e Cem");
+    }
 
     #[test]
     fn one_hundred_thousand_and_one() {
