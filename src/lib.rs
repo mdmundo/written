@@ -45,34 +45,6 @@ pub fn call_gen_higher(pow: usize, values: &[char]) -> Option<String> {
     }
 }
 
-// pub fn call_gen(pow: usize, values: &[char]) -> Option<String> {
-//     if values[0] == '0' && values[1] == '0' && values[2] == '0' {
-//         return None;
-//     };
-//     let append_thousands = if values[0] == '0' && values[1] == '0' && values[2] == '1' {
-//         get_one_thousand(pow)
-//     } else {
-//         get_many_thousands(pow)
-//     };
-//     let hundreds = get_hundreds(values[0]);
-//     let (tens, units) = if values[1] == '1' {
-//         (get_teens(values[2]), None)
-//     } else {
-//         (get_tens(values[1]), get_units(values[1]))
-//     };
-//     // return hundreds and tens and units thousands...
-//     // 100200112
-//     // 1200112
-//     let mut result = String::new();
-//     result.push_str(hundreds.unwrap_or(""));
-//     // result.push_str(if tens.is_none() { "" } else { " e " });
-//     result.push_str(tens.unwrap_or(""));
-//     // result.push_str(if units.is_none() { "" } else { " e " });
-//     result.push_str(units.unwrap_or(""));
-//     result.push_str(append_thousands.unwrap_or(""));
-//     Some(result)
-// }
-
 pub fn get_one_thousands(pow: usize) -> Option<String> {
     let thousand = get_thousands(pow, false);
     let mut result = String::from("Um");
