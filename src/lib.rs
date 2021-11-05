@@ -18,7 +18,7 @@ pub fn for_loop(chunks: std::iter::Enumerate<std::slice::RChunks<char>>) -> Opti
     let mut joiner: Vec<String> = Vec::new();
     for number in chunks {
         let called_result = match number {
-            (pow, values) => call_gen(pow, values),
+            (pow, values) => call_gen_higher(pow, values),
         };
         if called_result.is_some() {
             joiner.push(called_result.unwrap());
@@ -32,48 +32,58 @@ pub fn for_loop(chunks: std::iter::Enumerate<std::slice::RChunks<char>>) -> Opti
 pub fn call_gen_higher(pow: usize, values: &[char]) -> Option<String> {
     match values {
         ['0', '0', '0'] => None,
-        ['1', '0', '0'] => None,
-        ['0', '0', '1'] => None,
+        ['1', '0', '0'] => get_hundred_thousands(pow),
+        ['0', '0', '1'] => get_one_thousands(pow),
         [_, '1', _] => None,
         [_, _, _] => None,
         ['1', _] => None,
         [_, _] => None,
-        ['1'] => None,
+        ['1'] => get_one_thousands(pow),
         [_] => None,
         [] => None,
         [..] => None,
     }
 }
 
-pub fn call_gen(pow: usize, values: &[char]) -> Option<String> {
-    if values[0] == '0' && values[1] == '0' && values[2] == '0' {
-        return None;
-    };
-    let append_thousands = if values[0] == '0' && values[1] == '0' && values[2] == '1' {
-        get_one_thousand(pow)
-    } else {
-        get_many_thousands(pow)
-    };
-    let hundreds = get_hundreds(values[0]);
-    let (tens, units) = if values[1] == '1' {
-        (get_teens(values[2]), None)
-    } else {
-        (get_tens(values[1]), get_units(values[1]))
-    };
-    // return hundreds and tens and units thousands...
-    // 100200112
-    // 1200112
-    let mut result = String::new();
-    result.push_str(hundreds.unwrap_or(""));
-    // result.push_str(if tens.is_none() { "" } else { " e " });
-    result.push_str(tens.unwrap_or(""));
-    // result.push_str(if units.is_none() { "" } else { " e " });
-    result.push_str(units.unwrap_or(""));
-    result.push_str(append_thousands.unwrap_or(""));
+// pub fn call_gen(pow: usize, values: &[char]) -> Option<String> {
+//     if values[0] == '0' && values[1] == '0' && values[2] == '0' {
+//         return None;
+//     };
+//     let append_thousands = if values[0] == '0' && values[1] == '0' && values[2] == '1' {
+//         get_one_thousand(pow)
+//     } else {
+//         get_many_thousands(pow)
+//     };
+//     let hundreds = get_hundreds(values[0]);
+//     let (tens, units) = if values[1] == '1' {
+//         (get_teens(values[2]), None)
+//     } else {
+//         (get_tens(values[1]), get_units(values[1]))
+//     };
+//     // return hundreds and tens and units thousands...
+//     // 100200112
+//     // 1200112
+//     let mut result = String::new();
+//     result.push_str(hundreds.unwrap_or(""));
+//     // result.push_str(if tens.is_none() { "" } else { " e " });
+//     result.push_str(tens.unwrap_or(""));
+//     // result.push_str(if units.is_none() { "" } else { " e " });
+//     result.push_str(units.unwrap_or(""));
+//     result.push_str(append_thousands.unwrap_or(""));
+//     Some(result)
+// }
+
+pub fn get_one_thousands(pow: usize) -> Option<String> {
+    let thousand = get_thousands(pow, false);
+    let mut result = String::from("Um");
+    if thousand.is_some() {
+        result.push(' ');
+        result.push_str(thousand.unwrap());
+    }
     Some(result)
 }
 
-pub fn get_hundred_thousands(pow: usize, number: char) -> Option<String> {
+pub fn get_hundred_thousands(pow: usize) -> Option<String> {
     let thousand = get_thousands(pow, true);
     let mut result = String::from("Cem");
     if thousand.is_some() {
@@ -131,6 +141,20 @@ pub fn get_units(number: char) -> Option<&'static str> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn one_hundred_thousand_and_one() {
+        let input = validator("100001");
+        let result = parser_and_caller(input.unwrap().as_str());
+        assert_eq!(result.unwrap().as_str(), "Cem Mil e Um");
+    }
+
+    #[test]
+    fn one_thousand_and_one_hundred() {
+        let input = validator("1100");
+        let result = parser_and_caller(input.unwrap().as_str());
+        assert_eq!(result.unwrap().as_str(), "Um Mil e Cem");
+    }
 
     #[test]
     fn validate() {
