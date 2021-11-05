@@ -15,7 +15,7 @@ pub fn parser_and_caller(input: &str) -> Option<String> {
 }
 
 pub fn for_loop(chunks: std::iter::Enumerate<std::slice::RChunks<char>>) -> Option<String> {
-    let mut result = String::new();
+    let mut joiner: Vec<String> = Vec::new();
     for number in chunks {
         let called_result = match number {
             (pow, values) => call_gen(pow, values).unwrap(),
@@ -25,9 +25,27 @@ pub fn for_loop(chunks: std::iter::Enumerate<std::slice::RChunks<char>>) -> Opti
         // } else {
         //     ""
         // });
-        result.push_str(called_result.as_str());
+        joiner.push(called_result);
     }
+    joiner.reverse();
+    let result = joiner.join(" e ");
     Some(result)
+}
+
+pub fn call_gen_v2(pow: usize, values: &[char]) -> Option<String> {
+    match values {
+        ['0', '0', '0'] => None,
+        ['1', '0', '0'] => None,
+        ['0', '0', '1'] => None,
+        [_, '1', _] => None,
+        [_, _, _] => None,
+        ['1', _] => None,
+        [_, _] => None,
+        ['1'] => None,
+        [_] => None,
+        [] => None,
+        [..] => None,
+    }
 }
 
 pub fn call_gen(pow: usize, values: &[char]) -> Option<String> {
