@@ -162,49 +162,4 @@ mod tests {
         assert_eq!(validator("0000006"), Some(String::from("6")));
         assert_eq!(validator("o123456"), None);
     }
-
-    #[test]
-    fn caller1() {
-        let numbers = "654312".chars().collect::<Vec<char>>();
-        let chunks = numbers.rchunks(3).enumerate();
-        let result = for_loop(chunks);
-        println!("{}", result.unwrap());
-    }
-
-    #[test]
-    fn caller2() {
-        let numbers = "100200112".chars().collect::<Vec<char>>();
-        let chunks = numbers.rchunks(3).enumerate();
-        let result = for_loop(chunks);
-        println!("{}", result.unwrap());
-    }
-
-    #[test]
-    fn correct_approach() {
-        let numbers = "654312".chars().collect::<Vec<char>>();
-        let chunks = numbers.rchunks(3).enumerate();
-
-        for number in chunks {
-            match number {
-                (pow, values) => println!("{} {:#?}", pow, values),
-            }
-        }
-    }
-
-    #[test]
-    fn gen_approach() {
-        fn unit(val: char) -> Option<&'static str> {
-            match val {
-                '1' => Some("Um"),
-                _ => None,
-            }
-        }
-        fn gen(pow: usize, val: char) -> Option<&'static str> {
-            match pow {
-                0 => unit(val),
-                _ => None,
-            }
-        }
-        assert_eq!(gen(0, '1'), Some("Um"));
-    }
 }
