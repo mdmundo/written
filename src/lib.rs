@@ -18,21 +18,18 @@ pub fn for_loop(chunks: std::iter::Enumerate<std::slice::RChunks<char>>) -> Opti
     let mut joiner: Vec<String> = Vec::new();
     for number in chunks {
         let called_result = match number {
-            (pow, values) => call_gen(pow, values).unwrap(),
+            (pow, values) => call_gen(pow, values),
         };
-        // result.push_str(if !result.is_empty() && !called_result.is_empty() {
-        //     " e "
-        // } else {
-        //     ""
-        // });
-        joiner.push(called_result);
+        if called_result.is_some() {
+            joiner.push(called_result.unwrap());
+        };
     }
     joiner.reverse();
     let result = joiner.join(" e ");
     Some(result)
 }
 
-pub fn call_gen_v2(pow: usize, values: &[char]) -> Option<String> {
+pub fn call_gen_higher(pow: usize, values: &[char]) -> Option<String> {
     match values {
         ['0', '0', '0'] => None,
         ['1', '0', '0'] => None,
