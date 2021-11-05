@@ -1,3 +1,49 @@
+pub fn caller() {
+    let numbers = "654312".chars().collect::<Vec<char>>();
+    let chunks = numbers.rchunks(3).enumerate();
+    for_loop(chunks);
+}
+
+pub fn for_loop(chunks: std::iter::Enumerate<std::slice::RChunks<char>>) {
+    for number in chunks {
+        match number {
+            (pow, values) => println!("{} {:#?}", pow, values),
+        }
+    }
+}
+
+pub fn call_gen(pow: usize, values: &[char]) {
+    let append_thousands = get_thousands(pow);
+    let hundreds = get_hundreds(values[0]);
+    let is_teen = values[1] == '1';
+    let (tens, units) = if is_teen {
+        get_teens(values[2])
+    } else {
+        (get_tens(values[1]), get_units(values[1]))
+    };
+    // return hundreds and tens and units thousands...
+}
+
+pub fn get_thousands(number: usize) -> () {
+    ()
+}
+
+pub fn get_hundreds(number: char) -> () {
+    ()
+}
+
+pub fn get_teens(number: char) -> ((), ()) {
+    ((), ())
+}
+
+pub fn get_tens(number: char) -> () {
+    ()
+}
+
+pub fn get_units(number: char) -> () {
+    ()
+}
+
 #[cfg(test)]
 mod tests {
     #[test]
@@ -8,29 +54,6 @@ mod tests {
         for number in chunks {
             match number {
                 (pow, values) => println!("{} {:#?}", pow, values),
-            }
-        }
-    }
-
-    #[test]
-    fn input_approach() {
-        let input = "123";
-        let mut number = input.chars().enumerate();
-        assert_eq!(number.next(), Some((0, '1')));
-        assert_eq!(number.next(), Some((1, '2')));
-        assert_eq!(number.next(), Some((2, '3')));
-    }
-
-    #[test]
-    fn loop_approach() {
-        let number = "1".chars().enumerate();
-        for unit in number {
-            match unit {
-                (pow, val) => {
-                    // call fn here
-                    assert_eq!(0, pow);
-                    assert_eq!('1', val);
-                }
             }
         }
     }
@@ -50,34 +73,5 @@ mod tests {
             }
         }
         assert_eq!(gen(0, '1'), Some("Um"));
-    }
-
-    #[test]
-    fn approach() {
-        fn unit(val: char) -> Option<&'static str> {
-            match val {
-                '1' => Some("Um"),
-                _ => None,
-            }
-        }
-        fn gen(pow: usize, val: char) -> Option<&'static str> {
-            match pow {
-                0 => unit(val),
-                _ => None,
-            }
-        }
-        let number = "1".chars().enumerate();
-
-        let mut result = String::new();
-        for unit in number {
-            if !result.is_empty() {
-                result.push_str(" e ");
-            }
-            result.push_str(match unit {
-                (pow, val) => gen(pow, val).expect("Invalid"),
-            })
-            // this approach is wrong.
-            // how 19 would be?
-        }
     }
 }
