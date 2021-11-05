@@ -73,20 +73,22 @@ pub fn call_gen(pow: usize, values: &[char]) -> Option<String> {
     Some(result)
 }
 
-pub fn get_one_thousand(number: usize) -> Option<&'static str> {
-    match number {
-        0 => None,
-        1 => Some("Mil"),
-        2 => Some("Milhão"),
-        _ => None,
+pub fn get_hundred_thousands(pow: usize, number: char) -> Option<String> {
+    let thousand = get_thousands(pow, true);
+    let mut result = String::from("Cem");
+    if thousand.is_some() {
+        result.push(' ');
+        result.push_str(thousand.unwrap());
     }
+    Some(result)
 }
 
-pub fn get_many_thousands(number: usize) -> Option<&'static str> {
-    match number {
-        0 => None,
-        1 => Some("Mil"),
-        2 => Some("Milhões"),
+pub fn get_thousands(number: usize, many: bool) -> Option<&'static str> {
+    match (number, many) {
+        (0, _) => None,
+        (1, _) => Some("Mil"),
+        (2, false) => Some("Milhão"),
+        (2, true) => Some("Milhões"),
         _ => None,
     }
 }
