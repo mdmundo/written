@@ -1,8 +1,17 @@
-pub fn caller() {
-    let numbers = "654312".chars().collect::<Vec<char>>();
+pub fn validator(input: &str) -> Option<String> {
+    // let int: usize = input.parse().ok()?;
+    let int: usize = usize::from_str_radix(input, 10).ok()?;
+    let as_str_again: String = int.to_string();
+    Some(as_str_again)
+}
+
+pub fn parser_and_caller(input: &str) -> Option<String> {
+    let numbers = input.chars().collect::<Vec<char>>();
     let chunks = numbers.rchunks(3).enumerate();
-    let result = for_loop(chunks);
-    println!("{}", result.unwrap());
+    match for_loop(chunks) {
+        Some(result) => Some(result),
+        None => None,
+    }
 }
 
 pub fn for_loop(chunks: std::iter::Enumerate<std::slice::RChunks<char>>) -> Option<String> {
@@ -11,11 +20,11 @@ pub fn for_loop(chunks: std::iter::Enumerate<std::slice::RChunks<char>>) -> Opti
         let called_result = match number {
             (pow, values) => call_gen(pow, values).unwrap(),
         };
-        result.push_str(if !result.is_empty() && !called_result.is_empty() {
-            " e "
-        } else {
-            ""
-        });
+        // result.push_str(if !result.is_empty() && !called_result.is_empty() {
+        //     " e "
+        // } else {
+        //     ""
+        // });
         result.push_str(called_result.as_str());
     }
     Some(result)
@@ -37,12 +46,13 @@ pub fn call_gen(pow: usize, values: &[char]) -> Option<String> {
         (get_tens(values[1]), get_units(values[1]))
     };
     // return hundreds and tens and units thousands...
+    // 100200112
     // 1200112
     let mut result = String::new();
     result.push_str(hundreds.unwrap_or(""));
-    result.push_str(if tens.is_none() { "" } else { " e " });
+    // result.push_str(if tens.is_none() { "" } else { " e " });
     result.push_str(tens.unwrap_or(""));
-    result.push_str(if units.is_none() { "" } else { " e " });
+    // result.push_str(if units.is_none() { "" } else { " e " });
     result.push_str(units.unwrap_or(""));
     result.push_str(append_thousands.unwrap_or(""));
     Some(result)
@@ -103,6 +113,31 @@ pub fn get_units(number: char) -> Option<&'static str> {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+
+    #[test]
+    fn validate() {
+        assert_eq!(validator("123456"), Some(String::from("123456")));
+        assert_eq!(validator("0000006"), Some(String::from("6")));
+        assert_eq!(validator("o123456"), None);
+    }
+
+    #[test]
+    fn caller1() {
+        let numbers = "654312".chars().collect::<Vec<char>>();
+        let chunks = numbers.rchunks(3).enumerate();
+        let result = for_loop(chunks);
+        println!("{}", result.unwrap());
+    }
+
+    #[test]
+    fn caller2() {
+        let numbers = "100200112".chars().collect::<Vec<char>>();
+        let chunks = numbers.rchunks(3).enumerate();
+        let result = for_loop(chunks);
+        println!("{}", result.unwrap());
+    }
+
     #[test]
     fn correct_approach() {
         let numbers = "654312".chars().collect::<Vec<char>>();
