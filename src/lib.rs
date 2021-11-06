@@ -49,7 +49,7 @@ fn call_gen_higher(pow: usize, values: &[char]) -> Option<String> {
         ['1', '0', '0'] => get_hundred_thousands(pow),
         ['0', '0', '1'] => get_one_thousands(pow),
         ['0', '1', number] => get_teen_thousands(pow, *number),
-        [_, '1', number] => None,
+        [hundreds, '1', teens] => get_hundreds_teen_thousands(pow, *hundreds, *teens),
         [_, _, _] => None,
         ['1', number] => get_teen_thousands(pow, *number),
         [_, _] => None,
@@ -58,6 +58,25 @@ fn call_gen_higher(pow: usize, values: &[char]) -> Option<String> {
         [] => None,
         [..] => None,
     }
+}
+
+fn get_hundreds_teen_thousands(pow: usize, hundreds: char, teens: char) -> Option<String> {
+    let thousand = get_thousands(pow, true);
+    let hundreds_extended = get_hundreds(hundreds);
+    let teens_extended = get_teens(teens);
+    let mut result = String::new();
+    if hundreds_extended.is_some() {
+        result.push_str(hundreds_extended.unwrap());
+    };
+    if teens_extended.is_some() {
+        result.push_str(" e ");
+        result.push_str(teens_extended.unwrap());
+    };
+    if thousand.is_some() {
+        result.push(' ');
+        result.push_str(thousand.unwrap());
+    };
+    Some(result)
 }
 
 fn get_teen_thousands(pow: usize, number: char) -> Option<String> {
@@ -69,8 +88,8 @@ fn get_teen_thousands(pow: usize, number: char) -> Option<String> {
         if thousand.is_some() {
             result.push(' ');
             result.push_str(thousand.unwrap());
-        }
-    }
+        };
+    };
     Some(result)
 }
 
@@ -80,7 +99,7 @@ fn get_one_thousands(pow: usize) -> Option<String> {
     if thousand.is_some() {
         result.push(' ');
         result.push_str(thousand.unwrap());
-    }
+    };
     Some(result)
 }
 
@@ -90,7 +109,7 @@ fn get_hundred_thousands(pow: usize) -> Option<String> {
     if thousand.is_some() {
         result.push(' ');
         result.push_str(thousand.unwrap());
-    }
+    };
     Some(result)
 }
 
@@ -142,6 +161,20 @@ fn get_units(number: char) -> Option<&'static str> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn cento_e_dez() {
+        let input = "110";
+        let result = extended(input);
+        assert_eq!(result.unwrap().as_str(), "Cento e Dez");
+    }
+
+    #[test]
+    fn cento_e_doze_mil_e_um() {
+        let input = "112001";
+        let result = extended(input);
+        assert_eq!(result.unwrap().as_str(), "Cento e Doze Mil e Um");
+    }
 
     #[test]
     fn um() {
