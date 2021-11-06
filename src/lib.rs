@@ -1,11 +1,25 @@
-pub fn validator(input: &str) -> Option<String> {
+pub fn extended(input: &str) -> Result<String, &'static str> {
+    let int = validator(input);
+    if int.is_some() {
+        let partial = parser_and_caller(int.unwrap().as_str());
+        if partial.is_some() {
+            Ok(partial.unwrap())
+        } else {
+            Err("Erro desconhecido")
+        }
+    } else {
+        Err("Entrada inválida")
+    }
+}
+
+fn validator(input: &str) -> Option<String> {
     // let int: usize = input.parse().ok()?;
     let int: usize = usize::from_str_radix(input, 10).ok()?;
     let as_str_again: String = int.to_string();
     Some(as_str_again)
 }
 
-pub fn parser_and_caller(input: &str) -> Option<String> {
+fn parser_and_caller(input: &str) -> Option<String> {
     let numbers = input.chars().collect::<Vec<char>>();
     let chunks = numbers.rchunks(3).enumerate();
     match for_loop(chunks) {
@@ -14,7 +28,7 @@ pub fn parser_and_caller(input: &str) -> Option<String> {
     }
 }
 
-pub fn for_loop(chunks: std::iter::Enumerate<std::slice::RChunks<char>>) -> Option<String> {
+fn for_loop(chunks: std::iter::Enumerate<std::slice::RChunks<char>>) -> Option<String> {
     let mut joiner: Vec<String> = Vec::new();
     for number in chunks {
         let called_result = match number {
@@ -29,7 +43,7 @@ pub fn for_loop(chunks: std::iter::Enumerate<std::slice::RChunks<char>>) -> Opti
     Some(result)
 }
 
-pub fn call_gen_higher(pow: usize, values: &[char]) -> Option<String> {
+fn call_gen_higher(pow: usize, values: &[char]) -> Option<String> {
     match values {
         ['0', '0', '0'] => None,
         ['1', '0', '0'] => get_hundred_thousands(pow),
@@ -46,7 +60,7 @@ pub fn call_gen_higher(pow: usize, values: &[char]) -> Option<String> {
     }
 }
 
-pub fn get_teen_thousands(pow: usize, number: char) -> Option<String> {
+fn get_teen_thousands(pow: usize, number: char) -> Option<String> {
     let thousand = get_thousands(pow, true);
     let teen = get_teens(number);
     let mut result = String::new();
@@ -60,7 +74,7 @@ pub fn get_teen_thousands(pow: usize, number: char) -> Option<String> {
     Some(result)
 }
 
-pub fn get_one_thousands(pow: usize) -> Option<String> {
+fn get_one_thousands(pow: usize) -> Option<String> {
     let thousand = get_thousands(pow, false);
     let mut result = String::from("Um");
     if thousand.is_some() {
@@ -70,7 +84,7 @@ pub fn get_one_thousands(pow: usize) -> Option<String> {
     Some(result)
 }
 
-pub fn get_hundred_thousands(pow: usize) -> Option<String> {
+fn get_hundred_thousands(pow: usize) -> Option<String> {
     let thousand = get_thousands(pow, true);
     let mut result = String::from("Cem");
     if thousand.is_some() {
@@ -80,7 +94,7 @@ pub fn get_hundred_thousands(pow: usize) -> Option<String> {
     Some(result)
 }
 
-pub fn get_thousands(number: usize, many: bool) -> Option<&'static str> {
+fn get_thousands(number: usize, many: bool) -> Option<&'static str> {
     match (number, many) {
         (0, _) => None,
         (1, _) => Some("Mil"),
@@ -90,7 +104,7 @@ pub fn get_thousands(number: usize, many: bool) -> Option<&'static str> {
     }
 }
 
-pub fn get_hundreds(number: char) -> Option<&'static str> {
+fn get_hundreds(number: char) -> Option<&'static str> {
     match number {
         '0' => None,
         '1' => Some("Cento"),
@@ -99,7 +113,7 @@ pub fn get_hundreds(number: char) -> Option<&'static str> {
     }
 }
 
-pub fn get_teens(number: char) -> Option<&'static str> {
+fn get_teens(number: char) -> Option<&'static str> {
     match number {
         '0' => Some("Dez"),
         '1' => Some("Onze"),
@@ -108,7 +122,7 @@ pub fn get_teens(number: char) -> Option<&'static str> {
     }
 }
 
-pub fn get_tens(number: char) -> Option<&'static str> {
+fn get_tens(number: char) -> Option<&'static str> {
     match number {
         '0' => None,
         '2' => Some("Vinte"),
@@ -116,7 +130,7 @@ pub fn get_tens(number: char) -> Option<&'static str> {
     }
 }
 
-pub fn get_units(number: char) -> Option<&'static str> {
+fn get_units(number: char) -> Option<&'static str> {
     match number {
         '0' => None,
         '1' => Some("Um"),
@@ -128,6 +142,13 @@ pub fn get_units(number: char) -> Option<&'static str> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn um() {
+        let input = "1";
+        let result = extended(input);
+        assert_eq!(result.unwrap().as_str(), "Um");
+    }
 
     #[test]
     fn doze_mil_e_cem() {
