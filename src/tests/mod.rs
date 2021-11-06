@@ -2,6 +2,19 @@ use super::*;
 mod consts;
 
 #[test]
+fn entrada_invalida() {
+    assert_eq!(currency("100", "500"), Err("Entrada Inválida"));
+}
+
+#[test]
+fn cem_reais_e_cinquenta_centavos() {
+    assert_eq!(
+        currency("100", "50").unwrap().as_str(),
+        "Cem Reais e Cinquenta Centavos"
+    );
+}
+
+#[test]
 fn consts_largest() {
     let input = u128::MAX.to_string();
     let input_str = input.as_str();
