@@ -18,19 +18,6 @@ pub fn extended(input: &str) -> Result<String, &'static str> {
     }
 }
 
-pub fn currency(real: &str, cent: &str) -> Result<String, &'static str> {
-    if cent.len() > 2 {
-        return Err("Entrada Inválida");
-    };
-    let mut real_extended = extended(real)?;
-    let cent_extended = extended(cent)?;
-    real_extended.push_str(" Reais");
-    real_extended.push_str(" e ");
-    real_extended.push_str(cent_extended.as_str());
-    real_extended.push_str(" Centavos");
-    Ok(real_extended)
-}
-
 fn validator(input: &str) -> Option<String> {
     let int: u128 = u128::from_str_radix(input, 10).ok()?;
     let as_str_again: String = int.to_string();
