@@ -198,6 +198,13 @@ fn get_teens(number: char) -> Option<&'static str> {
         '0' => Some("Dez"),
         '1' => Some("Onze"),
         '2' => Some("Doze"),
+        '3' => Some("Treze"),
+        '4' => Some("Quatorze"),
+        '5' => Some("Quinze"),
+        '6' => Some("Dezesseis"),
+        '7' => Some("Dezessete"),
+        '8' => Some("Dezoito"),
+        '9' => Some("Dezenove"),
         _ => None,
     }
 }
