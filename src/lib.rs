@@ -215,6 +215,13 @@ fn get_units(number: char) -> Option<&'static str> {
         '0' => None,
         '1' => Some("Um"),
         '2' => Some("Dois"),
+        '3' => Some("Três"),
+        '4' => Some("Quatro"),
+        '5' => Some("Cinco"),
+        '6' => Some("Seis"),
+        '7' => Some("Sete"),
+        '8' => Some("Oito"),
+        '9' => Some("Nove"),
         _ => None,
     }
 }
