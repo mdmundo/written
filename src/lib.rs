@@ -48,10 +48,10 @@ fn call_gen_higher(pow: usize, values: &[char]) -> Option<String> {
         ['0', '0', '0'] => None,
         ['1', '0', '0'] => get_hundred_thousands(pow),
         ['0', '0', '1'] => get_one_thousands(pow),
-        ['0', '1', number] => get_teen_thousands(pow, *number),
-        [hundreds, '1', teens] => get_hundreds_teen_thousands(pow, *hundreds, *teens),
+        ['0', '1', number] => get_teens_thousands(pow, *number),
+        [hundreds, '1', teens] => get_hundreds_teens_thousands(pow, *hundreds, *teens),
         [_, _, _] => None,
-        ['1', number] => get_teen_thousands(pow, *number),
+        ['1', number] => get_teens_thousands(pow, *number),
         [_, _] => None,
         ['1'] => get_one_thousands(pow),
         [_] => None,
@@ -60,7 +60,7 @@ fn call_gen_higher(pow: usize, values: &[char]) -> Option<String> {
     }
 }
 
-fn get_hundreds_teen_thousands(pow: usize, hundreds: char, teens: char) -> Option<String> {
+fn get_hundreds_teens_thousands(pow: usize, hundreds: char, teens: char) -> Option<String> {
     let thousand = get_thousands(pow, true);
     let hundreds_extended = get_hundreds(hundreds);
     let teens_extended = get_teens(teens);
@@ -79,7 +79,7 @@ fn get_hundreds_teen_thousands(pow: usize, hundreds: char, teens: char) -> Optio
     Some(result)
 }
 
-fn get_teen_thousands(pow: usize, number: char) -> Option<String> {
+fn get_teens_thousands(pow: usize, number: char) -> Option<String> {
     let thousand = get_thousands(pow, true);
     let teen = get_teens(number);
     let mut result = String::new();
