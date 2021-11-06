@@ -50,7 +50,7 @@ fn call_gen_higher(pow: usize, values: &[char]) -> Option<String> {
         ['0', '0', '1'] => get_one_thousands(pow),
         ['0', '1', number] => get_teens_thousands(pow, *number),
         [hundreds, '1', teens] => get_hundreds_teens_thousands(pow, *hundreds, *teens),
-        [_, _, _] => None,
+        [hundreds, tens, units] => get_others_thousands(pow, *hundreds, *tens, *units),
         ['1', number] => get_teens_thousands(pow, *number),
         [_, _] => None,
         ['1'] => get_one_thousands(pow),
@@ -58,6 +58,30 @@ fn call_gen_higher(pow: usize, values: &[char]) -> Option<String> {
         [] => None,
         [..] => None,
     }
+}
+
+fn get_others_thousands(pow: usize, hundreds: char, tens: char, units: char) -> Option<String> {
+    let thousand = get_thousands(pow, true);
+    let hundreds_extended = get_hundreds(hundreds);
+    let tens_extended = get_tens(tens);
+    let units_extended = get_units(units);
+    let mut result = String::new();
+    if hundreds_extended.is_some() {
+        result.push_str(hundreds_extended.unwrap());
+    };
+    if tens_extended.is_some() {
+        result.push_str(" e ");
+        result.push_str(tens_extended.unwrap());
+    };
+    if units_extended.is_some() {
+        result.push_str(" e ");
+        result.push_str(units_extended.unwrap());
+    };
+    if thousand.is_some() {
+        result.push(' ');
+        result.push_str(thousand.unwrap());
+    };
+    Some(result)
 }
 
 fn get_hundreds_teens_thousands(pow: usize, hundreds: char, teens: char) -> Option<String> {
@@ -161,6 +185,16 @@ fn get_units(number: char) -> Option<&'static str> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn duzentos_e_vinte_e_dois_milhoes_e_cento_e_onze_mil_e_duzentos_e_doze() {
+        let input = "222111212";
+        let result = extended(input);
+        assert_eq!(
+            result.unwrap().as_str(),
+            "Duzentos e Vinte e Dois Milhões e Cento e Onze Mil e Duzentos e Doze"
+        );
+    }
 
     #[test]
     fn cento_e_dez() {
