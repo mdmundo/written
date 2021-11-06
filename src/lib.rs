@@ -189,6 +189,13 @@ fn get_hundreds(number: char) -> Option<&'static str> {
         '0' => None,
         '1' => Some("Cento"),
         '2' => Some("Duzentos"),
+        '3' => Some("Trezentos"),
+        '4' => Some("Quatrocentos"),
+        '5' => Some("Quinhentos"),
+        '6' => Some("Seiscentos"),
+        '7' => Some("Setecentos"),
+        '8' => Some("Oitocentos"),
+        '9' => Some("Novecentos"),
         _ => None,
     }
 }

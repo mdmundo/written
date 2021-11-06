@@ -1,6 +1,16 @@
 use super::*;
 
 #[test]
+fn quinhentos_milhoes_e_trezentos_mil_e_cem() {
+    let input = "500300100";
+    let result = extended(input);
+    assert_eq!(
+        result.unwrap().as_str(),
+        "Quinhentos Milhões e Trezentos Mil e Cem"
+    );
+}
+
+#[test]
 fn dezesseis_milhoes_e_quinze_mil_e_dezenove() {
     let input = "16015019";
     let result = extended(input);
