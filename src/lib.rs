@@ -1,6 +1,3 @@
-// TODO
-// Crates.io Setting
-
 #[cfg(test)]
 mod tests;
 
