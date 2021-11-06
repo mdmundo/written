@@ -37,7 +37,6 @@ fn validator(input: &str) -> Option<String> {
     Some(as_str_again)
 }
 
-// Clone
 fn parser_and_caller(input: &str) -> Option<String> {
     let numbers = input.chars().collect::<Vec<char>>();
     let chunks = numbers.rchunks(3).enumerate();
