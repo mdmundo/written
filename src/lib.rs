@@ -60,6 +60,7 @@ fn triple_generator(pow: usize, values: &[char]) -> Option<String> {
         [hundreds, tens, units] => get_others_thousands(pow, *hundreds, *tens, *units),
         ['1', units] => get_teens_thousands(pow, *units),
         [tens, units] => get_tens_thousands(pow, *tens, *units),
+        ['0'] => Some("Zero".to_owned()),
         ['1'] => get_one_thousands(pow),
         [units] => get_units_thousands(pow, *units),
         [] => None,

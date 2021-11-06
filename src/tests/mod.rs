@@ -119,6 +119,13 @@ fn um() {
 }
 
 #[test]
+fn zero() {
+    let input = "0";
+    let result = extended(input);
+    assert_eq!(result.unwrap().as_str(), "Zero");
+}
+
+#[test]
 fn doze_mil_e_cem() {
     let input = validator("12100");
     let result = parser_and_caller(input.unwrap().as_str());
