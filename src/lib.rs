@@ -46,18 +46,34 @@ fn for_loop(chunks: std::iter::Enumerate<std::slice::RChunks<char>>) -> Option<S
 fn call_gen_higher(pow: usize, values: &[char]) -> Option<String> {
     match values {
         ['0', '0', '0'] => None,
-        ['1', '0', '0'] => get_hundred_thousands(pow),
         ['0', '0', '1'] => get_one_thousands(pow),
-        ['0', '1', number] => get_teens_thousands(pow, *number),
-        [hundreds, '1', teens] => get_hundreds_teens_thousands(pow, *hundreds, *teens),
+        ['0', '0', units] => get_units_thousands(pow, *units),
+        ['0', '1', units] => get_teens_thousands(pow, *units),
+        ['0', tens, units] => get_tens_thousands(pow, *tens, *units),
+        ['1', '0', '0'] => get_hundred_thousands(pow),
+        [hundreds, '1', units] => get_hundreds_teens_thousands(pow, *hundreds, *units),
         [hundreds, tens, units] => get_others_thousands(pow, *hundreds, *tens, *units),
-        ['1', number] => get_teens_thousands(pow, *number),
+        ['1', units] => get_teens_thousands(pow, *units),
         [tens, units] => get_tens_thousands(pow, *tens, *units),
         ['1'] => get_one_thousands(pow),
-        [_] => None,
+        [units] => get_units_thousands(pow, *units),
         [] => None,
         [..] => None,
     }
+}
+
+fn get_units_thousands(pow: usize, units: char) -> Option<String> {
+    let thousand = get_thousands(pow, true);
+    let units_extended = get_units(units);
+    let mut result = String::new();
+    if units_extended.is_some() {
+        result.push_str(units_extended.unwrap());
+    };
+    if thousand.is_some() {
+        result.push(' ');
+        result.push_str(thousand.unwrap());
+    };
+    Some(result)
 }
 
 fn get_tens_thousands(pow: usize, tens: char, units: char) -> Option<String> {
@@ -103,10 +119,10 @@ fn get_others_thousands(pow: usize, hundreds: char, tens: char, units: char) -> 
     Some(result)
 }
 
-fn get_hundreds_teens_thousands(pow: usize, hundreds: char, teens: char) -> Option<String> {
+fn get_hundreds_teens_thousands(pow: usize, hundreds: char, units: char) -> Option<String> {
     let thousand = get_thousands(pow, true);
     let hundreds_extended = get_hundreds(hundreds);
-    let teens_extended = get_teens(teens);
+    let teens_extended = get_teens(units);
     let mut result = String::new();
     if hundreds_extended.is_some() {
         result.push_str(hundreds_extended.unwrap());
@@ -122,9 +138,9 @@ fn get_hundreds_teens_thousands(pow: usize, hundreds: char, teens: char) -> Opti
     Some(result)
 }
 
-fn get_teens_thousands(pow: usize, number: char) -> Option<String> {
+fn get_teens_thousands(pow: usize, units: char) -> Option<String> {
     let thousand = get_thousands(pow, true);
-    let teen = get_teens(number);
+    let teen = get_teens(units);
     let mut result = String::new();
     if teen.is_some() {
         result.push_str(teen.unwrap());
@@ -204,6 +220,20 @@ fn get_units(number: char) -> Option<&'static str> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn dois_milhoes_e_dois_mil_e_dois() {
+        let input = "2002002";
+        let result = extended(input);
+        assert_eq!(result.unwrap().as_str(), "Dois Milhões e Dois Mil e Dois");
+    }
+
+    #[test]
+    fn um_milhao_e_um_mil_e_um() {
+        let input = "1001001";
+        let result = extended(input);
+        assert_eq!(result.unwrap().as_str(), "Um Milhão e Um Mil e Um");
+    }
 
     #[test]
     fn vinte_e_dois_milhoes_e_cem_mil_e_doze() {
