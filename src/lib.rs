@@ -4,7 +4,6 @@
 #[cfg(test)]
 mod tests;
 
-// Args e call Clone
 pub fn extended(input: &str) -> Result<String, &'static str> {
     let int = validator(input);
     if int.is_some() {

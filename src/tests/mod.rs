@@ -2,7 +2,7 @@ use super::*;
 mod consts;
 
 #[test]
-fn entrada_invalida() {
+fn entrada_invalida_currency() {
     assert_eq!(currency("100", "500"), Err("Entrada Inválida"));
 }
 
