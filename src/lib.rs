@@ -1,6 +1,7 @@
 // TODO
-// Support Negative
+// Support Decimal Places
 // Support Case
+// Crates.io Setting
 
 #[cfg(test)]
 mod tests;
