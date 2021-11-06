@@ -16,7 +16,6 @@ pub fn extended(input: &str) -> Result<String, &'static str> {
 }
 
 fn validator(input: &str) -> Option<String> {
-    // let int: usize = input.parse().ok()?;
     let int: usize = usize::from_str_radix(input, 10).ok()?;
     let as_str_again: String = int.to_string();
     Some(as_str_again)
