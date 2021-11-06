@@ -1,7 +1,13 @@
 [package]
 name = "written"
-version = "0.1.0"
+version = "0.0.1"
 edition = "2021"
+description = "Números naturais por extenso"
+documentation = "https://docs.rs/written/0.0.1"
+readme = "README.md"
+homepage = "https://crates.io/crates/written"
+repository = "https://github.com/mdmundo/written"
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
