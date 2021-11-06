@@ -1,6 +1,6 @@
 //! Números naturais por extenso
 //!
-//! # Quick Start
+//! # Como Usar
 //!
 //! ```
 //! use written::extended;
@@ -17,6 +17,30 @@
 #[cfg(test)]
 mod tests;
 
+/// Recebe um número natural e retorna escrito por extenso, retornando `Err` se o valor fornecido for inválido.
+///
+/// Note que o número deve estar entre 0 and `u128::MAX`.
+///
+/// # Exemplos
+///
+/// Uso Básico:
+///
+/// ```
+/// assert_eq!(
+///     written::extended("500300100").unwrap().as_str(),
+///     "Quinhentos Milhões e Trezentos Mil e Cem"
+/// );
+///
+/// assert_eq!(
+///     written::extended("16015019").unwrap().as_str(),
+///     "Dezesseis Milhões e Quinze Mil e Dezenove"
+/// );
+///
+/// assert_eq!(
+///     written::extended("1001001").unwrap().as_str(),
+///     "Um Milhão e Um Mil e Um"
+/// );
+/// ```
 pub fn extended(input: &str) -> Result<String, &'static str> {
     let int = validator(input);
     if int.is_some() {
