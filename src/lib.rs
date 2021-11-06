@@ -24,17 +24,17 @@ fn validator(input: &str) -> Option<String> {
 fn parser_and_caller(input: &str) -> Option<String> {
     let numbers = input.chars().collect::<Vec<char>>();
     let chunks = numbers.rchunks(3).enumerate();
-    match for_loop(chunks) {
+    match triple_joiner(chunks) {
         Some(result) => Some(result),
         None => None,
     }
 }
 
-fn for_loop(chunks: std::iter::Enumerate<std::slice::RChunks<char>>) -> Option<String> {
+fn triple_joiner(chunks: std::iter::Enumerate<std::slice::RChunks<char>>) -> Option<String> {
     let mut joiner: Vec<String> = Vec::new();
     for number in chunks {
         let called_result = match number {
-            (pow, values) => call_gen_higher(pow, values),
+            (pow, values) => triple_generator(pow, values),
         };
         if called_result.is_some() {
             joiner.push(called_result.unwrap());
@@ -45,7 +45,7 @@ fn for_loop(chunks: std::iter::Enumerate<std::slice::RChunks<char>>) -> Option<S
     Some(result)
 }
 
-fn call_gen_higher(pow: usize, values: &[char]) -> Option<String> {
+fn triple_generator(pow: usize, values: &[char]) -> Option<String> {
     match values {
         ['0', '0', '0'] => None,
         ['0', '0', '1'] => get_one_thousands(pow),
