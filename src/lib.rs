@@ -1,3 +1,7 @@
+// TODO
+// Support Negative
+// Support Case
+
 #[cfg(test)]
 mod tests;
 
@@ -16,7 +20,7 @@ pub fn extended(input: &str) -> Result<String, &'static str> {
 }
 
 fn validator(input: &str) -> Option<String> {
-    let int: usize = usize::from_str_radix(input, 10).ok()?;
+    let int: u128 = u128::from_str_radix(input, 10).ok()?;
     let as_str_again: String = int.to_string();
     Some(as_str_again)
 }
@@ -180,6 +184,28 @@ fn get_thousands(number: usize, many: bool) -> Option<&'static str> {
         (1, _) => Some("Mil"),
         (2, false) => Some("Milhão"),
         (2, true) => Some("Milhões"),
+        (3, false) => Some("Bilhão"),
+        (3, true) => Some("Bilhões"),
+        (4, false) => Some("Trilhão"),
+        (4, true) => Some("Trilhões"),
+        (5, false) => Some("Quatrilhão"),
+        (5, true) => Some("Quatrilhões"),
+        (6, false) => Some("Quintilhão"),
+        (6, true) => Some("Quintilhões"),
+        (7, false) => Some("Sextilhão"),
+        (7, true) => Some("Sextilhões"),
+        (8, false) => Some("Septilhão"),
+        (8, true) => Some("Septilhões"),
+        (9, false) => Some("Octilhão"),
+        (9, true) => Some("Octilhões"),
+        (10, false) => Some("Nonilhão"),
+        (10, true) => Some("Nonilhões"),
+        (11, false) => Some("Decilhão"),
+        (11, true) => Some("Decilhões"),
+        (12, false) => Some("Undecilhão"),
+        (12, true) => Some("Undecilhões"),
+        (13, false) => Some("Duodecilhão"),
+        (13, true) => Some("Duodecilhões"),
         _ => None,
     }
 }
