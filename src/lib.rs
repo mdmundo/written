@@ -206,6 +206,13 @@ fn get_tens(number: char) -> Option<&'static str> {
     match number {
         '0' => None,
         '2' => Some("Vinte"),
+        '3' => Some("Trinta"),
+        '4' => Some("Quarenta"),
+        '5' => Some("Cinquenta"),
+        '6' => Some("Sessenta"),
+        '7' => Some("Setenta"),
+        '8' => Some("Oitenta"),
+        '9' => Some("Noventa"),
         _ => None,
     }
 }
