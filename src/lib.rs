@@ -1,3 +1,19 @@
+//! Números naturais por extenso
+//!
+//! # Quick Start
+//!
+//! ```
+//! use written::extended;
+//!
+//! let input = "9128204";
+//! let result = extended(input);
+//!
+//! assert_eq!(
+//!     result.unwrap().as_str(),
+//!     "Nove Milhões e Cento e Vinte e Oito Mil e Duzentos e Quatro"
+//! );
+//! ```
+
 #[cfg(test)]
 mod tests;
 
