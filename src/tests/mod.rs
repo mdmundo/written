@@ -2,7 +2,7 @@ use super::*;
 mod consts;
 
 #[test]
-fn too_long() {
+fn consts_largest() {
     let input = u128::MAX.to_string();
     let input_str = input.as_str();
     let result = extended(input_str);
